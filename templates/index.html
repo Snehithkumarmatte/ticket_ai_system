@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Ticket Creation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>AI-Powered Ticket Creation System</h1>
+    <p class="subtitle">
+        Enter your IT issue below. The system will automatically generate a support ticket.
+    </p>
+
+    <form method="POST">
+        <textarea
+            name="ticket"
+            placeholder="Example: VPN is not connecting and Outlook keeps crashing on my laptop..."
+            required></textarea>
+
+        <button type="submit">Generate Ticket</button>
+    </form>
+
+    {% if message %}
+    <div class="output warning">
+        {{ message }}
+    </div>
+    {% endif %}
+
+    {% if ticket %}
+    <div class="output">
+        <h3>Generated Ticket</h3>
+
+        <div class="row"><span>Ticket ID</span><span>{{ ticket.ticket_id }}</span></div>
+        <div class="row"><span>Title</span><span>{{ ticket.title }}</span></div>
+        <div class="row"><span>Category</span><span>{{ ticket.category }}</span></div>
+        <div class="row"><span>Priority</span><span>{{ ticket.priority }}</span></div>
+        <div class="row"><span>Status</span><span>{{ ticket.status }}</span></div>
+        <div class="row"><span>Created At</span><span>{{ ticket.created_at }}</span></div>
+
+        <hr>
+
+        <h4>Description</h4>
+        <p class="description">{{ ticket.description }}</p>
+
+        <hr>
+
+        <h4>Extracted Entities</h4>
+        <ul>
+            <li><strong>Devices:</strong>
+                {{ ticket.entities.devices | join(", ") if ticket.entities.devices else "None" }}
+            </li>
+            <li><strong>Applications:</strong>
+                {{ ticket.entities.applications | join(", ") if ticket.entities.applications else "None" }}
+            </li>
+            <li><strong>Error Codes:</strong>
+                {{ ticket.entities.error_codes | join(", ") if ticket.entities.error_codes else "None" }}
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        © 2025 AI Ticket Automation System
+    </div>
+</div>
+
+</body>
+</html>
